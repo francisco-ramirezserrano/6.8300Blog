@@ -1,486 +1,318 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-<link rel="shortcut icon" href="images/icon.ico"> <style type="text/css">
-    body {
-        background-color: #f5f9ff;
-        color: #333; /* Darker text color for body */
-    }
-
-    /* Hide both math displays initially, will display based on JS detection */
-   .mathjax-mobile, .mathml-non-mobile { display: none; }
-
-   /* Show the MathML content by default on non-mobile devices */
-   .show-mathml .mathml-non-mobile { display: block; }
-   .show-mathjax .mathjax-mobile { display: block; }
-
-    .content-margin-container {
-        display: flex;
-        width: 100%; /* Ensure the container is full width */
-        justify-content: left; /* Horizontally centers the children in the container */
-        align-items: flex-start;  /* Align items to the top */
-        margin-bottom: 40px; /* Increased space between sections */
-        padding-top: 10px; /* Added padding to help with potential TOC overlap */
-    }
-    /* Reduce top padding for the very first container (header) */
-    body > .content-margin-container:first-child {
-        padding-top: 0;
-        margin-bottom: 20px; /* Less margin after header */
-    }
-
-    .main-content-block {
-        width: 70%; /* Change this percentage as needed */
-        max-width: 1100px; /* Optional: Maximum width */
-        background-color: #fff;
-        border-left: 1px solid #DDD;
-        border-right: 1px solid #DDD;
-        padding: 20px 25px 20px 25px; /* Increased padding */
-        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir";
-        line-height: 1.6; /* Improve readability */
-        color: #333; /* Ensure main text is dark */
-        min-height: 100px; /* Ensure block has some height even if empty */
-    }
-    .margin-left-block {
-            font-size: 14px;
-            width: 15%; /* Change this percentage as needed */
-            max-width: 130px; /* Optional: Maximum width */
-            position: relative;
-            margin-left: 10px;
-            text-align: left;
-            font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir";
-            padding: 5px;
-            flex-shrink: 0; /* Prevent shrinking */
-    }
-    .margin-right-block {
-            font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir";
-            font-size: 14px;
-            width: 25%; /* Change this percentage as needed */
-            max-width: 256px; /* Optional: Maximum width */
-            position: relative;
-            text-align: left;
-            padding: 10px;  /* Optional: Adds padding inside the caption */
-            margin-left: 10px; /* Add some space from the main block */
-            flex-shrink: 0; /* Prevent shrinking */
-    }
-
-    img {
-            max-width: 100%; /* Make sure it fits inside the container */
-            height: auto;
-            display: block;
-            margin: 20px auto; /* Add vertical spacing */
-            border: 1px solid #EEE; /* Subtle border for images */
-    }
-    .my-video {
-            max-width: 100%; /* Make sure it fits inside the container */
-            height: auto;
-            display: block;
-            margin: auto;
-    }
-    /* Hide both video displays initially, will display based on JS detection */
-   .vid-mobile, .vid-non-mobile { display: none; }
-
-   /* Show the video content by default on non-mobile devices */
-   .show-vid-mobile .vid-mobile { display: block; }
-   .show-vid-non-mobile .vid-non-mobile { display: block; }
-
-    a:link,a:visited
-    {
-        color: #0e7862; /*#1367a7;*/
-        text-decoration: none;
-    }
-    a:hover {
-        color: #24b597; /*#208799;*/
-        text-decoration: underline;
-    }
-
-    h1 {
-        font-size: 24px; /* Larger heading */
-        margin-top: 10px; /* More space above heading */
-        margin-bottom: 15px; /* More space below heading */
-        border-bottom: 1px solid #EEE; /* Separator line */
-        padding-bottom: 5px; /* Space between text and line */
-        font-weight: normal;
-        color: #111; /* Darker headings */
-    }
-    h2 {
-        font-size: 20px;
-        margin-top: 25px; /* More space above H2 */
-        margin-bottom: 10px;
-        font-weight: normal;
-         color: #222; /* Darker headings */
-    }
-     h3 {
-        font-size: 18px;
-        margin-top: 20px; /* More space above H3 */
-        margin-bottom: 8px;
-        font-weight: bold;
-         color: #333; /* Darker headings */
-    }
-
-    table.header {
-    font-weight: 300;
-    font-size: 17px;
-    flex-grow: 1;
-        width: 100%; /* Use full width of main block */
-    max-width: 100%;
-    }
-    table td, table td * {
-        vertical-align: middle;
-        position: relative;
-        padding-bottom: 5px; /* Add padding between rows */
-    }
-    table.paper-code-tab { /* Removed - not used in this structure */ }
-    .layered-paper { /* Removed - not used in this structure */ }
-
-    hr {
-    height: 1px; /* Sets the height of the line to 1 pixel */
-    border: none; /* Removes the default border */
-    background-color: #DDD; /* Sets the line color to gray */
-    margin-top: 30px; /* More space around hr */
-    margin-bottom: 30px;
-    }
-
-    div.hypothesis { /* Removed - not used in this structure */ }
-
-    div.citation {
-    font-size: 0.9em; /* Slightly larger citation font */
-    background-color:#f9f9f9; /* Light background for citation block */
-    padding: 15px;
-    border: 1px solid #EEE;
-    margin-top: 20px; /* Space above citations */
-        height: auto; /* Auto height */
-        line-height: 1.5;
-    }
-    /* Style for individual reference items */
-    .reference-item {
-        margin-bottom: 12px; /* Increased space between references */
-        padding-left: 30px; /* Indent references */
-        text-indent: -30px; /* Hanging indent */
-    }
-    .reference-item > a:first-child { /* Style the [N] part */
-        font-weight: bold;
-        color: #555;
-        text-decoration: none;
-        margin-right: 5px;
-    }
-
-
-    /* Removed fade-in animations for simplicity */
-
-    .inline-div { /* Removed - not used in this structure */ }
-
-    .toc {
-        position: sticky; /* Make ToC sticky within its container */
-        top: 20px; /* Stick near the top */
-        max-width: inherit;
-        padding-right: 10px; /* Space from main content */
-    }
-    .toc a {
-        display: block; /* Each link on a new line */
-        margin-bottom: 8px; /* Space between links */
-    }
-
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulating And Evolving 3D Virtual Creatures Generated by Foundation Models</title>
     <meta property="og:title" content="Simulating And Evolving 3D Virtual Creatures Generated by Foundation Models" />
-    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="images/icon.ico"> <style type="text/css">
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e0f2fe; /* Light ocean blue (Tailwind sky-100) */
+            color: #374151; /* Tailwind gray-700 */
+        }
+
+        /* Style for the active link in the Table of Contents */
+        .toc-link.active {
+            font-weight: 600; /* Semibold */
+            color: #0ea5e9; /* Tailwind sky-500 */
+            background-color: #f0f9ff; /* sky-50 */
+            border-left: 3px solid #0ea5e9; /* sky-500 */
+            padding-left: 0.5rem; /* Adjust padding for border */
+            margin-left: -0.75rem; /* Counteract padding shift */
+        }
+
+        /* Ensure smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Basic MathML/MathJax visibility (can be enhanced with JS) */
+        .mathjax-mobile, .mathml-non-mobile { display: none; }
+        .show-mathml .mathml-non-mobile { display: block; }
+        .show-mathjax .mathjax-mobile { display: block; }
+
+        /* Target specific elements for darker text if needed */
+        h1, h2, h3, h4, h5, h6 {
+             color: #1f2937; /* Tailwind gray-800 */
+        }
+
+        .main-content-block a {
+            color: #059669; /* Tailwind emerald-600 */
+            text-decoration: none;
+        }
+        .main-content-block a:hover {
+            color: #047857; /* Tailwind emerald-700 */
+            text-decoration: underline;
+        }
+
+        /* Style for reference links */
+        .reference-item > a:first-child { /* Style the [N] part */
+            font-weight: bold;
+            color: #4b5563; /* gray-600 */
+            text-decoration: none;
+            margin-right: 5px;
+        }
+        .reference-item {
+             margin-bottom: 0.75rem; /* Space between references */
+             padding-left: 1.5rem; /* Indent references */
+             text-indent: -1.5rem; /* Hanging indent */
+        }
+
+    </style>
 </head>
+<body class="bg-sky-100">
 
-<body>
+    <div class="container mx-auto flex flex-wrap lg:flex-nowrap justify-center py-8 px-4">
 
-    <div class="content-margin-container">
-        <div class="margin-left-block">
-            </div>
-        <div class="main-content-block">
-            <table class="header" align=left>
-                <tr>
-                    <td colspan=4>
-                        <span style="font-size: 28px; font-weight:bold;">Simulating And Evolving 3D Virtual Creatures Generated by Foundation Models</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span style="font-size:17px"><a href="#">Francisco Ramirez Serrano</a></span> </td>
-                </tr>
-                <tr>
-                    <td colspan=4 align=left><span style="font-size:18px">First Year EECS PhD, MIT</span></td>
-                </tr>
-                 <tr>
-                     <td colspan=4 align=left><span style="font-size:16px"><i>Final project for 6.7960, MIT</i></span></td>
-                 </tr>
-                 <tr>
-                    <td colspan=4 align=left><span style="font-size:14px">Contact: <a href="mailto:framser@mit.edu">framser@mit.edu</a></span></td>
-                 </tr>
-
-                 <tr>
-                    <td colspan=4 align=left><span style="font-size:14px">Data/Code available at: <a href="http://your.repo.here.com">http://your.repo.here.com</a></span></td>
-                 </tr>
-            </table>
-        </div>
-        <div class="margin-right-block">
-             </div>
-    </div>
-
-    <div class="content-margin-container" id="abstract">
-        <div class="margin-left-block">
-            <div class="toc">
-                <b style="font-size:16px">Outline</b><br><br>
-                <a href="#abstract">Abstract</a><br>
-                <a href="#introduction">1. Introduction</a><br>
-                <a href="#creature_generation_pipeline">2. Creature Generation Pipeline</a><br>
-                <a href="#pipeline">3. Pipeline Details</a><br> <a href="#computational_design">4. Computational Design & Simulation</a><br>
-                <a href="#evolvability">5. Evolvability</a><br> <a href="#evolutionary_loop">6. Evolutionary Loop</a><br>
-                <a href="#results">7. Results</a><br>
-                <a href="#discussion">8. Discussion</a><br>
-                <a href="#acknowledgements">Acknowledgements</a><br>
-                <a href="#references">References</a><br>
+        <div class="w-full lg:w-1/6 flex-shrink-0 order-2 lg:order-1 lg:pr-4 mb-8 lg:mb-0">
+            <div id="toc-container" class="sticky top-5">
+                <b class="text-lg font-semibold mb-3 block text-gray-700">Outline</b>
+                <nav id="toc-nav" class="space-y-2">
+                    <a href="#abstract" class="toc-link block text-sm text-gray-600 hover:text-sky-600 transition-colors duration-150 py-1 px-3 rounded-md">Abstract</a>
+                    <a href="#introduction" class="toc-link block text-sm text-gray-600 hover:text-sky-600 transition-colors duration-150 py-1 px-3 rounded-md">1. Introduction</a>
+                    <a href="#creature_generation_pipeline" class="toc-link block text-sm text-gray-600 hover:text-sky-600 transition-colors duration-150 py-1 px-3 rounded-md">2. Creature Generation Pipeline</a>
+                    <a href="#pipeline" class="toc-link block text-sm text-gray-600 hover:text-sky-600 transition-colors duration-150 py-1 px-3 rounded-md">3. Pipeline Details</a>
+                    <a href="#computational_design" class="toc-link block text-sm text-gray-600 hover:text-sky-600 transition-colors duration-150 py-1 px-3 rounded-md">4. Computational Design & Simulation</a>
+                    <a href="#evolvability" class="toc-link block text-sm text-gray-600 hover:text-sky-600 transition-colors duration-150 py-1 px-3 rounded-md">5. Evolvability</a>
+                    <a href="#evolutionary_loop" class="toc-link block text-sm text-gray-600 hover:text-sky-600 transition-colors duration-150 py-1 px-3 rounded-md">6. Evolutionary Loop</a>
+                    <a href="#results" class="toc-link block text-sm text-gray-600 hover:text-sky-600 transition-colors duration-150 py-1 px-3 rounded-md">7. Results</a>
+                    <a href="#discussion" class="toc-link block text-sm text-gray-600 hover:text-sky-600 transition-colors duration-150 py-1 px-3 rounded-md">8. Discussion</a>
+                    <a href="#acknowledgements" class="toc-link block text-sm text-gray-600 hover:text-sky-600 transition-colors duration-150 py-1 px-3 rounded-md">Acknowledgements</a>
+                    <a href="#references" class="toc-link block text-sm text-gray-600 hover:text-sky-600 transition-colors duration-150 py-1 px-3 rounded-md">References</a>
+                </nav>
             </div>
         </div>
-        <div class="main-content-block">
-            <h1>Summary</h1>
-            Necessary conditions to evolve 3D virtual creatures that match the open-ended richness observed in living entities on earth include a combination of an expressive evolvable genotypical encoding, a rich simulation environment with varied fitness agendas, an appropriate evolutionary search paradigm, and enough compute/evolutional loops to allow for complexification to emerge. To this final point, alife experiments still fall about 4 to 5 orders of magnitude less evolution generations than estimates of generation loops occuring on earth. To mediate this point, we define a pipeline that leverages generative AI to seed our base 3D creatures.
-        </div>
-        <div class="margin-right-block">
-             </div>
-    </div>
 
-    <div class="content-margin-container" id="introduction">
-        <div class="margin-left-block">
-            </div>
-        <div class="main-content-block">
-            <h1>1. Introduction</h1>
-
-            <img src="./figures/Figure1.jpg" style="width:512px; max-width: 100%;" alt="Figure 1: Phase transition energies"/> Advancements in Artificial Intelligence and foundation models enable on-demand generation of 3D topologies. These 3D models have received great attention for applications linked to engineering design, but have not yet been leveraged for the study of artificial life. The underlying prior information informing the generative design are datasets of all life on earth and these models are therefore perfectly positioned to generate "Life as it could be". This paper aims to uncover how forms generated by foundation models can be simulated and evolved to learn about general principles.
-            <br><br>
-            Artificial Life (Alife) aims to explore through simulation "life as it could be". To uncover the mysteries of the observed open-ended evolution <a href="#ref_hughes2024openendednessessentialartificialsuperhuman">[1]</a> that took place on earth, a large body of work focuses on Euclidean spaces of dimension three as they model physical space. Foundation models armed with prior knowledge of our world are able to generate on demand 3D objects representing known and unknown lifeforms. This paper aims to explore how such these shapes can be brought to life and evolved.
-            <br><br>
-            Multiple obstacles have prevented researchers from reproducing the evolution of natural life in simulation. Encodings and complexification, limited compute for both creature expansion but also enough generations, advanced and rich enough environments, the right evolutive pressures and serendipitous curriculum learning <a href="#ref_Vaxenburg2025">[2]</a>.
-            <br><br>
-            Advances in artificial intelligence technologies are being leveraged to advance artificial life research in multiple facets (Search, evolution pressure etc.) <a href="#ref_kumar2024automatingsearchartificiallife">[3]</a>.
-            <br><br>
-            This paper focuses on leveraging Mesh generators, which take in a prompt or an image and output a 3D shape, for the evolution of virtual creatures in 3D substrates. Attention in Generative CAD etc. <a href="#ref_Wong_2024">[4]</a> but less application to Alife.
-            <br><br>
-            Desired traits of Foundation models for our application.
-            <br><br>
-            3D worlds approximating real physics allow researchers to intuitively explore how the virtual creature encodings supports known animal-like life forms and function. Additionally, evolved solutions in simulation can be more intuitively physically embodied.
-            <br><br>
-            Presentation of DiffAqua, and concrete experiments <a href="#ref_motionPlanner">[5]</a>, <a href="#ref_KSims">[6, 7]</a>. <br><br>
-            Prompt‑Level Genotype – Introduces natural‑language prompts as a compact, expressive, and human‑interpretable genome.
-            <br><br>
-            Prompt-level genotypes.
-            <br><br>
-            Freeform Evolution requires tremendous compute and real-world priors are a way to accelerate the search for functional solutions/narrow the search space <a href="#ref_li2024generatingfreeformendoskeletalrobots">[8]</a>.
-            <br><br>
-            Traits of image generators including character consistency, Attribute Precision, cleaner voxelization boundaries, edit‑in‑place all facilitate these pipelines.
-            <br><br>
-            2D→3D Bridging now possible – Demonstrates a practical, scalable route from textual ideas to physics‑ready meshes with no artist in the loop.
-        </div>
-         <div class="margin-right-block">
-            <b>Figure 1:</b> ``Energies'' (inferiorities) of strings in a first-order
-             phase transition with latent heat $\Delta\epsilon$.
-             <br><br>
-             <i>Note: LaTeX math $\Delta\epsilon$ might not render correctly without MathJax/MathML setup. Consider replacing with "Delta epsilon" or an image if needed.</i>
-        </div>
-    </div>
-
-    <div class="content-margin-container" id="creature_generation_pipeline">
-         <div class="margin-left-block">
-            </div>
-        <div class="main-content-block">
-            <h1>2. Creature Generation Pipeline</h1>
-            On representations. Because the mutations occur in the high-level feature space (via the generative process) rather than direct bit flips, <b>most offspring are valid</b> – a critical requirement for evolvability.
-            <br><br>
-            Free-form text prompts as an encoding layer have the advantage of being directly <b>human interpretable</b>, <b>richly descriptive</b> and easily <b>mutable</b> <a href="#ref_guo2025evopromptconnectingllmsevolutionary">[9]</a>, <a href="#ref_Wong_2023">[10]</a>. Prompts have the ability to directly affect the shape of virtual creatures through multiple mechanisms, including global known lifeforms as targets, attribute modifiers as descriptors, etc.
-            <br><br>
-            Modern text-to-image generation models have made great strides in 2024–2025. Key advancements include character consistency across images <a href="#ref_tewel2024trainingfreeconsistenttexttoimagegeneration">[11]</a>, fine attribute control <a href="#ref_brooks2023instructpix2pixlearningfollowimage">[12]</a>, editability, and high resolution <a href="#ref_podell2023sdxlimprovinglatentdiffusion">[13]</a>, all of which help maintain coherence and precision as evolved creatures are visualized.
-            <br><br>
-            2025 has seen a burst of tools and models for image-to-3D reconstruction <a href="#ref_tochilkin2024triposrfast3dobject">[14]</a> and text-to-3D synthesis <a href="#ref_zhu2024hifahighfidelitytextto3dgeneration">[15]</a>. These developments enable a prompt-to-3D pipeline: a prompt produces an image (the creature’s appearance) and then AI lifts that into a 3D mesh for use in virtual worlds or physics simulations. Fast Single-Image Reconstruction: feed-forward pass under 0.5 seconds. Significantly better 3D quality from text prompts. Large focus on usable, animation-ready geometry as well as Clean and Watertight Mesh Generation.
-            <br><br>
-            A grand challenge is to reverse-engineer function from that form. Affordance and Mobility Inference: A line of recent work in computer vision and robotics focuses on understanding the affordances of 3D objects. For example, in the context of scenes, methods now can identify articulating parts and how they move (doors that rotate, drawers that slide, etc.) <a href="#ref_53213">[16]</a>. In our example, for DiffAqua, we might want to detect and animate fish parts.
-            <br><br>
-            Automated rigging <a href="#ref_liu2025riganythingtemplatefreeautoregressiverigging">[17]</a>, <a href="#ref_RigNet">[18]</a>.
-            <br><br>
-            Translating this to evolved creatures: if we generate a creature mesh, we could apply similar techniques to predict joint locations (e.g. identify limb segments and likely hinge points at knees or shoulders). The model might recognize “this looks like a leg that could bend here” or “these wings probably flap along this edge.” Such an automatic rigging or motion inference is still in early stages, but the components are emerging. At a simpler level, just classifying the creature’s morphology (does it have legs? wings? wheels?) can inform what type of movement to attempt. This is analogous to how a human seeing a fantastical creature might guess “it seems to have fins, so maybe it swims.” By leveraging large datasets of 3D objects with known functions (e.g. Shape2Motion dataset for articulated objects), one can train models to extend those predictions to new, AI-generated forms.
-            <br><br>
-            Evolving Controllers for AI-Generated Bodies: physics-augmented diffusion model <a href="#ref_wang2023diffusebot">[19]</a>, <a href="#ref_li2025dsoaligning3dgenerators">[20]</a>, <a href="#ref_guo2024physicallycompatible3dobject">[21]</a>.
-            <br><br>
-            Simulation-Based Fitness. In April 2025, a joint team from Google DeepMind and HHMI Janelia unveiled the first whole‑body physics simulation of the fruit fly Drosophila melanogaster—an anatomically detailed virtual insect that can both walk and fly realistically.
-            <br><br>
-            The remainder of this paper is organized as follows: Section 2 reviews related work in generative AI for 3D content creation, evolutionary computation with generative models, and physics-based simulation for functional design. Section 3 details the proposed methodology, including the prompt-level genotype, the genotype-to-phenotype pipeline, and the evolutionary framework. Section 4 describes the experimental setup using the DiffAqua environment and presents the results. Section 5 discusses the findings, strengths, limitations, and broader implications of the approach. Finally, Section 6 concludes the paper and outlines future research directions.
-        </div>
-        <div class="margin-right-block">
-             </div>
-    </div>
-
-    <div class="content-margin-container" id="pipeline">
-         <div class="margin-left-block">
-            </div>
-        <div class="main-content-block">
-            <h1>3. Pipeline Details</h1> <h2>2.1 Related Work</h2> <h3>2.1.1. Advances in Text-to-Image Synthesis</h3>
-            Text-to-image (T2I) synthesis has seen remarkable progress, largely driven by diffusion models such as Stable Diffusion <a href="#ref_rombach2022highresolutionimagesynthesislatent">[22]</a>, DALL-E <a href="#ref_ramesh2021zeroshottexttoimagegeneration">[23]</a>, and Imagen <a href="#ref_saharia2022photorealistictexttoimagediffusionmodels">[24]</a>. These models can generate high-quality, diverse images from textual prompts. A key area of development is Visual Concept Mining (VCM) <a href="#ref_li2025comprehensivesurveyvisualconcept">[25]</a>, which aims to enhance the controllability of T2I models by allowing them to learn specific visual concepts (e.g., artistic styles, object features) from reference images, complementing textual inputs. This improved controllability is crucial for generating specific and consistent visual features for virtual creatures.
-            <h3>2.1.2. From 2D Images to 3D Models</h3>
-            Bridging the gap from 2D images to 3D models is a critical step. Current research in diffusion models for 3D generation can be broadly classified into three categories: 2D space diffusion leveraging pretrained 2D models, 2D space diffusion without pretrained models, and diffusion processes operating directly in 3D space <a href="#ref_placeholder1">[P1]</a>.
-            <br>
-            Techniques like DreamFusion <a href="#ref_placeholder1">[P1]</a> and Score Jacobian Chaining <a href="#ref_placeholder1">[P1]</a> utilize pretrained 2D diffusion models to optimize 3D representations (often Neural Radiance Fields, NeRFs) by scoring rendered 2D views. Image-to-3D mesh generation tools like Trellis <a href="#ref_placeholder2">[P2]</a>, employed in this work, aim to produce explicit mesh representations directly. Trellis and similar models <a href="#ref_placeholder1">[P1]</a> represent a scalable route to 3D assets, though challenges such as the "Janus problem" (multi-view inconsistency) persist and are active areas of research <a href="#ref_placeholder1">[P1]</a>. Efficient alternatives like DreamGaussian also contribute to this rapidly evolving field <a href="#ref_placeholder1">[P1]</a>, <a href="#ref_hsinying2025consistentsubjectgenerationcontrastive">[26]</a>.
-            </div>
-        <div class="margin-right-block">
-            Note [P1], [P2]: Placeholder citations used where the original LaTeX source had numbers (e.g., 1, 2) without corresponding cite keys. These should be replaced with proper references by linking to the correct ID below.
-        </div>
-    </div>
-
-    <div class="content-margin-container" id="computational_design">
-         <div class="margin-left-block">
-            </div>
-        <div class="main-content-block">
-            <h1>4. Computational Design and Simulation Environments in ALife</h1>
-            Specialized simulation environments are crucial for ALife research involving embodied agents:
-            <br><br>
-            DiffAqua <a href="#ref_Ma_2021">[27]</a>, the chosen platform for this work, provides a differentiable pipeline for the co-design of soft underwater swimmer geometry (using Wasserstein barycenters for shape interpolation) and their controllers. Its differentiability allows for efficient gradient-based optimization <a href="#ref_DiffTaichi">[28]</a>.
-            <br><br>
-            <h2>3.2 Proposed Methodology (Example Subsection)</h2> <h3>3.2.3. Step 3: Mesh Adaptation for Simulation (DiffAqua)</h3>
-            This step is critical for translating the raw 3D mesh into a format suitable for the DiffAqua soft body physics simulator. This involves voxelization and the definition of actuation (muscles).
-            <br><br>
-            <b>Voxelization:</b> The mesh generated by Trellis is converted into a voxel-based representation.
-            Method: A uniform grid voxelization approach is typically employed, though adaptive methods could be explored. Standard libraries or custom scripts can perform this conversion. The resolution of the voxel grid is a key parameter, balancing simulation fidelity against computational cost. General literature on voxelization from images provides context for this process.
-            <br><br>
-            <b>Muscle Placement / Actuator Definition:</b> Defining how the creature is actuated is crucial for assessing its function.
-            Automation Challenge: The automation and intelligence of this "muscle placement" step are of paramount importance for a truly AI-driven design pipeline. If this requires significant manual intervention, it becomes a bottleneck.
-            Current Approach (Hypothesized based on user input): An automated or heuristic-based method is used to place actuators on the voxelized creature. This could involve:
-            <ul>
-                <li>Identifying prominent appendages or regions of the body from the geometry.</li>
-                <li>Using simple rules (e.g., placing actuators along the main axis for undulation, or within limb-like structures).</li>
-                <li>Potentially deriving cues from the initial prompt (e.g., "powerful flippers" might suggest actuator placement in flipper-like regions).</li>
-            </ul>
-            Context from Simulators: DiffAqua itself is designed for co-designing geometry and controllers. SoftZoo provides interfaces for specifying muscle placement. DiffuseBot also parameterizes actuator placement for its soft robots.
-            <br><br>
-            Novelty Potential: A sophisticated method for automated muscle placement, perhaps using geometric deep learning on the mesh or further LLM-based interpretation of the prompt to infer functional regions, could be a significant research contribution in its own right. This directly addresses the challenge of deriving function from AI-generated form.
-            <br><br>
-            <b>Material Properties:</b> Material properties for the soft body simulation in DiffAqua (e.g., Young's modulus, density) are assigned. Initially, these might be uniform across the creature's body. More advanced implementations could allow for heterogeneous material properties, potentially also guided by the prompt or evolved. SoftZoo, for example, allows for specifying body stiffness.
-        </div>
-        <div class="margin-right-block">
-             </div>
-    </div>
-
-    <div class="content-margin-container" id="evolvability">
-         <div class="margin-left-block">
-            </div>
-        <div class="main-content-block">
-            <h1>5. Evolvability</h1> Mitigate diversity collapse by evolving in different representations.
-             <br><br>
-             <h2>2.2 Related Work (Continued)</h2> <h3>2.2.1. Prompts and LLMs as Genotypes & Evolutionary Operators</h3>
-
-            <a href="#ref_hemberg2024evolvingcodelargelanguage">[29]</a>, <a href="#ref_nisioti2024textlifereciprocalrelationship">[30]</a>, <a href="#ref_cai2024exploringimprovementevolutionarycomputation">[31]</a>, <a href="#ref_fernando2023promptbreederselfreferentialselfimprovementprompt">[32]</a>, <a href="#ref_bradley2023qualitydiversityaifeedback">[33]</a>, <a href="#ref_lehman2022evolutionlargemodels">[34]</a>.
-            <br>
-            The idea of using LLMs to guide or perform evolutionary operations is gaining traction. LLM GP formalizes an LLM-based evolutionary algorithm for evolving code, where the LLM handles initialization, mutation, and crossover by processing and generating prompts that represent programs <a href="#ref_placeholder1">[P1]</a>. Several systems showcase this paradigm: Evolution through Large Models (ELM) uses LLMs as intelligent mutation operators for robotic morphologies; EvoPrompting and PromptBreeder evolve the prompts themselves for in-context learning; EvoLLM treats the LLM as an end-to-end evolutionary algorithm; and Quality-Diversity through AI Feedback (QDAIF) uses LLMs to vary and evaluate texts and code for diversity and quality <a href="#ref_placeholder2">[P2]</a>. LLMs are also being explored for broader improvements to EC, such as assisting in evolutionary strategy selection, optimizing population design, and enhancing operator design.
-        </div>
-        <div class="margin-right-block">
-             Note [P1], [P2]: Placeholder citations used where the original LaTeX source had numbers (e.g., 1, 2) without corresponding cite keys. These should be replaced with proper references by linking to the correct ID below.
-        </div>
-    </div>
-
-     <div class="content-margin-container" id="evolutionary_loop">
-         <div class="margin-left-block">
-            </div>
-        <div class="main-content-block">
-            <h1>6. Evolutionary Loop and Termination Criteria</h1>
-            (Content for this section was missing in the provided LaTeX source)
-        </div>
-        <div class="margin-right-block">
-             </div>
-    </div>
-
-    <div class="content-margin-container" id="results">
-         <div class="margin-left-block">
-            </div>
-        <div class="main-content-block">
-            <h1>7. Results</h1>
-             Open-endedness and creativity
-            <a href="#ref_hughes2024openendednessessentialartificialsuperhuman">[1]</a>, <a href="#ref_kamb2024analytictheorycreativityconvolutional">[35]</a>.
-             <br><br>
-             (Detailed results content to be added)
-
-        </div>
-        <div class="margin-right-block">
-             </div>
-    </div>
-
-    <div class="content-margin-container" id="discussion">
-         <div class="margin-left-block">
-            </div>
-        <div class="main-content-block">
-            <h1>8. Discussion</h1>
-             In this particular system avalanche size can be approximated by the size $s$ of the genotype that gave rise to it, see <a href="#introduction">Figure 1</a>. We shall measure the distribution of these sizes $P(s)$ in the Artificial Life system Avida, which implements a population of self-replicating computer programs written in a simple machine language-like instruction set of $\mathcal{D}=24$ instructions, with programs of varying sequence length. In the course of self-replication, these programs produce mutant off-spring because the `copy` instruction they use is flawed at a rate $R$ errors per instruction copied, and adapt to an environment in which the performance of <i>logical</i> computations on externally provided numbers is akin to the catalysis of chemical reactions <a href="#ref_OBA">[36]</a>. In this <i>artificial chemistry</i> therefore, successful computations accelerate the metabolism (i.e., the CPU) of those strings that carry the <i>gene</i> (code) necessary to perform the trick, and any program discovering a new trick is the seed of another avalanche.
-             <br><br>
-             <i>Note: LaTeX math $s$, $P(s)$, $\mathcal{D}=24$, $R$ might not render correctly without MathJax/MathML setup. Consider replacing with plain text or images if needed. The reference \Cref{size} was interpreted as a link to Figure 1 based on context. The reference \citep{OBA} was mapped to the OBA entry in the bibliography.</i>
-        </div>
-        <div class="margin-right-block">
-             </div>
-    </div>
-
-     <div class="content-margin-container" id="acknowledgements">
-        <div class="margin-left-block">
-            </div>
-        <div class="main-content-block">
-            <h1>Acknowledgements</h1>
-            This work was supported by NSF grant No. 123456. </div>
-        <div class="margin-right-block">
-             </div>
-    </div>
-
-
-    <div class="content-margin-container" id="references">
-         <div class="margin-left-block">
-            </div>
-        <div class="main-content-block">
-             <div class='citation'>
-                <span style="font-size:16px; font-weight:bold;">References:</span><br><br>
-                <div class="reference-item"><a id="ref_hughes2024openendednessessentialartificialsuperhuman">[1]</a> Hughes, E., Dennis, M., Parker-Holder, J., Behbahani, F., Mavalankar, A., Shi, Y., Schaul, T., & Rocktaschel, T. (2024). Open-Endedness is Essential for Artificial Superhuman Intelligence. arXiv preprint arXiv:2406.04268. <a href="https://arxiv.org/abs/2406.04268" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_Vaxenburg2025">[2]</a> Vaxenburg, R., Siwanowicz, I., Merel, J., Robie, A. A., Morrow, C., Novati, G., Stefanidi, Z., Both, G.-J., Card, G. M., Reiser, M. B., Botvinick, M. M., Branson, K. M., Tassa, Y., & Turaga, S. C. (2025). Whole-body physics simulation of fruit fly locomotion. <i>Nature</i>. <a href="http://dx.doi.org/10.1038/s41586-025-09029-4" target="_blank">[DOI]</a></div>
-                <div class="reference-item"><a id="ref_kumar2024automatingsearchartificiallife">[3]</a> Kumar, A., Lu, C., Kirsch, L., Tang, Y., Stanley, K. O., Isola, P., & Ha, D. (2024). Automating the Search for Artificial Life with Foundation Models. arXiv preprint arXiv:2412.17799. <a href="https://arxiv.org/abs/2412.17799" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_Wong_2024">[4]</a> Wong, M., Rios, T., Menzel, S., & Ong, Y. S. (2024, June). Prompt Evolutionary Design Optimization with Generative Shape and Vision-Language models. In <i>2024 IEEE Congress on Evolutionary Computation (CEC)</i> (pp. 1–8). IEEE. <a href="http://dx.doi.org/10.1109/CEC60901.2024.10611898" target="_blank">[DOI]</a></div>
-                <div class="reference-item"><a id="ref_motionPlanner">[5]</a> Satoi, D., Hagiwara, M., Uemoto, A., Nakadai, H., & Hoshino, J. (2016). Unified motion planner for fishes with various swimming styles. <i>ACM Transactions on Graphics (TOG)</i>, 35(4), 1-15. <a href="https://doi.org/10.1145/2897824.2925977" target="_blank">[DOI]</a></div>
-                <div class="reference-item"><a id="ref_10.1145/192161.192167">[6]</a> Sims, K. (1994). Evolving virtual creatures. In <i>Proceedings of the 21st annual conference on Computer graphics and interactive techniques</i> (pp. 15-22). <a href="https://doi.org/10.1145/192161.192167" target="_blank">[DOI]</a></div>
-                 <div class="reference-item"><a id="ref_KSims">[7]</a> Sims, K. (2023). Evolving Virtual Creatures. In <i>Seminal Graphics Papers: Pushing the Boundaries, Volume 2</i> (Art. 73). ACM. <a href="https://doi.org/10.1145/3596711.3596785" target="_blank">[DOI]</a></div>
-                <div class="reference-item"><a id="ref_li2024generatingfreeformendoskeletalrobots">[8]</a> Li, M., Kong, L., & Kriegman, S. (2024). Generating Freeform Endoskeletal Robots. arXiv preprint arXiv:2412.01036. <a href="https://arxiv.org/abs/2412.01036" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_guo2025evopromptconnectingllmsevolutionary">[9]</a> Guo, Q., Wang, R., Guo, J., Li, B., Song, K., Tan, X., Liu, G., Bian, J., & Yang, Y. (2025). EvoPrompt: Connecting LLMs with Evolutionary Algorithms Yields Powerful Prompt Optimizers. arXiv preprint arXiv:2309.08532. <a href="https://arxiv.org/abs/2309.08532" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_Wong_2023">[10]</a> Wong, M., Ong, Y.-S., Gupta, A., Bali, K. K., & Chen, C. (2023, June). Prompt Evolution for Generative AI: A Classifier-Guided Approach. In <i>2023 IEEE Conference on Artificial Intelligence (CAI)</i> (pp. 226–229). IEEE. <a href="http://dx.doi.org/10.1109/cai54212.2023.00105" target="_blank">[DOI]</a></div>
-                <div class="reference-item"><a id="ref_tewel2024trainingfreeconsistenttexttoimagegeneration">[11]</a> Tewel, Y., Kaduri, O., Gal, R., Kasten, Y., Wolf, L., Chechik, G., & Atzmon, Y. (2024). Training-Free Consistent Text-to-Image Generation. arXiv preprint arXiv:2402.03286. <a href="https://arxiv.org/abs/2402.03286" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_brooks2023instructpix2pixlearningfollowimage">[12]</a> Brooks, T., Holynski, A., & Efros, A. A. (2023). InstructPix2Pix: Learning to Follow Image Editing Instructions. arXiv preprint arXiv:2211.09800. <a href="https://arxiv.org/abs/2211.09800" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_podell2023sdxlimprovinglatentdiffusion">[13]</a> Podell, D., English, Z., Lacey, K., Blattmann, A., Dockhorn, T., Müller, J., Penna, J., & Rombach, R. (2023). SDXL: Improving Latent Diffusion Models for High-Resolution Image Synthesis. arXiv preprint arXiv:2307.01952. <a href="https://arxiv.org/abs/2307.01952" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_tochilkin2024triposrfast3dobject">[14]</a> Tochilkin, D., Pankratz, D., Liu, Z., Huang, Z., Letts, A., Li, Y., Liang, D., Laforte, C., Jampani, V., & Cao, Y.-P. (2024). TripoSR: Fast 3D Object Reconstruction from a Single Image. arXiv preprint arXiv:2403.02151. <a href="https://arxiv.org/abs/2403.02151" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_zhu2024hifahighfidelitytextto3dgeneration">[15]</a> Zhu, J., Zhuang, P., & Koyejo, S. (2024). HiFA: High-fidelity Text-to-3D Generation with Advanced Diffusion Guidance. arXiv preprint arXiv:2305.18766. <a href="https://arxiv.org/abs/2305.18766" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_53213">[16]</a> Delitzas, A., Takmaz, A., Tombari, F., Pollefeys, M., & Engelmann, F. (2024). SceneFun3D: Fine-Grained Functionality and Affordance Understanding in 3D Scenes. In <i>CVPR</i>. <a href="https://alexdelitzas.github.io/assets/pdf/SceneFun3D.pdf" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_liu2025riganythingtemplatefreeautoregressiverigging">[17]</a> Liu, I., Xu, Z., Yifan, W., Tan, H., Xu, Z., Wang, X., Su, H., & Shi, Z. (2025). RigAnything: Template-Free Autoregressive Rigging for Diverse 3D Assets. arXiv preprint arXiv:2502.09615. <a href="https://arxiv.org/abs/2502.09615" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_RigNet">[18]</a> Xu, Z., Zhou, Y., Kalogerakis, E., Landreth, C., & Singh, K. (2020). RigNet: Neural Rigging for Articulated Characters. <i>ACM Transactions on Graphics (TOG)</i>, 39.</div>
-                <div class="reference-item"><a id="ref_wang2023diffusebot">[19]</a> Wang, T.-H., Zheng, J., Ma, P., Du, Y., Kim, B., Spielberg, A. E., Tenenbaum, J. B., Gan, C., & Rus, D. (2023). DiffuseBot: Breeding Soft Robots With Physics-Augmented Generative Diffusion Models. In <i>Thirty-seventh Conference on Neural Information Processing Systems</i>. <a href="https://openreview.net/forum?id=1zo4iioUEs" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_li2025dsoaligning3dgenerators">[20]</a> Li, R., Zheng, C., Rupprecht, C., & Vedaldi, A. (2025). DSO: Aligning 3D Generators with Simulation Feedback for Physical Soundness. arXiv preprint arXiv:2503.22677. <a href="https://arxiv.org/abs/2503.22677" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_guo2024physicallycompatible3dobject">[21]</a> Guo, M., Wang, B., Ma, P., Zhang, T., Owens, C. E., Gan, C., Tenenbaum, J. B., He, K., & Matusik, W. (2024). Physically Compatible 3D Object Modeling from a Single Image. arXiv preprint arXiv:2405.20510. <a href="https://arxiv.org/abs/2405.20510" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_rombach2022highresolutionimagesynthesislatent">[22]</a> Rombach, R., Blattmann, A., Lorenz, D., Esser, P., & Ommer, B. (2022). High-Resolution Image Synthesis with Latent Diffusion Models. arXiv preprint arXiv:2112.10752. <a href="https://arxiv.org/abs/2112.10752" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_ramesh2021zeroshottexttoimagegeneration">[23]</a> Ramesh, A., Pavlov, M., Goh, G., Gray, S., Voss, C., Radford, A., Chen, M., & Sutskever, I. (2021). Zero-Shot Text-to-Image Generation. arXiv preprint arXiv:2102.12092. <a href="https://arxiv.org/abs/2102.12092" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_saharia2022photorealistictexttoimagediffusionmodels">[24]</a> Saharia, C., Chan, W., Saxena, S., Li, L., Whang, J., Denton, E., Ghasemipour, S. K. S., Ayan, B. K., Mahdavi, S. S., Lopes, R. G., Salimans, T., Ho, J., Fleet, D. J., & Norouzi, M. (2022). Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding. arXiv preprint arXiv:2205.11487. <a href="https://arxiv.org/abs/2205.11487" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_li2025comprehensivesurveyvisualconcept">[25]</a> Li, Z., Li, J., Xiong, L., Fu, Z., & Li, Z. (2025). A Comprehensive Survey on Visual Concept Mining in Text-to-image Diffusion Models. arXiv preprint arXiv:2503.13576. <a href="https://arxiv.org/abs/2503.13576" target="_blank">[Link]</a></div>
-                 <div class="reference-item"><a id="ref_hsinying2025consistentsubjectgenerationcontrastive">[26]</a> Lee, H.-Y., Chan, K. C. K., & Yang, M.-H. (2025). Consistent Subject Generation via Contrastive Instantiated Concepts. arXiv preprint arXiv:2503.24387. <a href="https://arxiv.org/abs/2503.24387" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_Ma_2021">[27]</a> Ma, P., Du, T., Zhang, J. Z., Wu, K., Spielberg, A., Katzschmann, R. K., & Matusik, W. (2021). DiffAqua: a differentiable computational design pipeline for soft underwater swimmers with shape interpolation. <i>ACM Transactions on Graphics (TOG)</i>, 40(4), 1-14. <a href="http://dx.doi.org/10.1145/3450626.3459832" target="_blank">[DOI]</a></div>
-                <div class="reference-item"><a id="ref_DiffTaichi">[28]</a> Hu, Y., Anderson, L., Li, T.-M., Sun, Q., Carr, N., Ragan-Kelley, J., & Durand, F. (2019). DiffTaichi: Differentiable Programming for Physical Simulation. arXiv preprint arXiv:1910.00935. <a href="http://arxiv.org/abs/1910.00935" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_hemberg2024evolvingcodelargelanguage">[29]</a> Hemberg, E., Moskal, S., & O'Reilly, U.-M. (2024). Evolving Code with A Large Language Model. arXiv preprint arXiv:2401.07102. <a href="https://arxiv.org/abs/2401.07102" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_nisioti2024textlifereciprocalrelationship">[30]</a> Nisioti, E., Glanois, C., Najarro, E., Dai, A., Meyerson, E., Pedersen, J. W., Teodorescu, L., Hayes, C. F., Sudhakaran, S., & Risi, S. (2024). From Text to Life: On the Reciprocal Relationship between Artificial Life and Large Language Models. arXiv preprint arXiv:2407.09502. <a href="https://arxiv.org/abs/2407.09502" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_cai2024exploringimprovementevolutionarycomputation">[31]</a> Cai, J., Xu, J., Li, J., Ymauchi, T., Iba, H., & Tei, K. (2024). Exploring the Improvement of Evolutionary Computation via Large Language Models. arXiv preprint arXiv:2405.02876. <a href="https://arxiv.org/abs/2405.02876" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_fernando2023promptbreederselfreferentialselfimprovementprompt">[32]</a> Fernando, C., Banarse, D., Michalewski, H., Osindero, S., & Rocktäschel, T. (2023). Promptbreeder: Self-Referential Self-Improvement Via Prompt Evolution. arXiv preprint arXiv:2309.16797. <a href="https://arxiv.org/abs/2309.16797" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_bradley2023qualitydiversityaifeedback">[33]</a> Bradley, H., Dai, A., Teufel, H., Zhang, J., Oostermeijer, K., Bellagente, M., Clune, J., Stanley, K., Schott, G., & Lehman, J. (2023). Quality-Diversity through AI Feedback. arXiv preprint arXiv:2310.13032. <a href="https://arxiv.org/abs/2310.13032" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_lehman2022evolutionlargemodels">[34]</a> Lehman, J., Gordon, J., Jain, S., Ndousse, K., Yeh, C., & Stanley, K. O. (2022). Evolution through Large Models. arXiv preprint arXiv:2206.08896. <a href="https://arxiv.org/abs/2206.08896" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_kamb2024analytictheorycreativityconvolutional">[35]</a> Kamb, M., & Ganguli, S. (2024). An analytic theory of creativity in convolutional diffusion models. arXiv preprint arXiv:2412.20292. <a href="https://arxiv.org/abs/2412.20292" target="_blank">[Link]</a></div>
-                <div class="reference-item"><a id="ref_OBA">[36]</a> Ofria, C. and Brown, C.T. (1998). The Avida User's Manual. In Adami (1998). The Avida software is publicly available at ftp.krl.caltech.edu/pub/avida.</div>
+        <div class="w-full lg:w-4/6 flex-shrink-0 order-1 lg:order-2 mb-8 lg:mb-0">
+            <section id="header" class="bg-white rounded-xl shadow-md p-6 mb-8">
+                <h1 class="text-3xl font-bold mb-2 text-gray-800">Simulating And Evolving 3D Virtual Creatures Generated by Foundation Models</h1>
+                <div class="flex flex-wrap gap-x-4 gap-y-1 text-gray-600 mb-3">
+                    <span><a href="#" class="hover:text-sky-600">Francisco Ramirez Serrano</a></span>
+                    <span><a href="#" class="hover:text-sky-600">Jiaming Liu</a></span>
+                    <span><a href="#" class="hover:text-sky-600">Marcello Tania</a></span>
+                    <span><a href="#" class="hover:text-sky-600">Neil Gershenfeld</a></span>
                 </div>
+                <p class="text-lg text-gray-700 mb-1">Center For Bits and Atoms, MIT</p>
+                <p class="text-sm text-gray-500 mb-1"><i>Final project for 6.7960, MIT</i></p>
+                <p class="text-sm text-gray-500 mb-3">Contact: <a href="mailto:framser@mit.edu" class="text-sky-600 hover:underline">framser@mit.edu</a></p>
+                <div class="text-sm text-gray-500 space-x-4">
+                     <span>Submission type: <b>Full Paper</b></span>
+                     <span>Data/Code: <a href="http://your.repo.here.com" class="text-sky-600 hover:underline">http://your.repo.here.com</a></span>
+                </div>
+            </section>
+
+            <section id="abstract" class="bg-white rounded-xl shadow-md p-6 mb-10 scroll-mt-16">
+                <h2 class="text-2xl font-semibold mb-4 border-b pb-2">Abstract</h2>
+                <p>Necessary conditions to evolve 3D virtual creatures that match the open-ended richness observed in living entities on earth include a combination of an expressive evolvable genotypical encoding, a rich simulation environment with varied fitness agendas, an appropriate evolutionary search paradigm, and enough compute/evolutional loops to allow for complexification to emerge. To this final point, alife experiments still fall about 4 to 5 orders of magnitude less evolution generations than estimates of generation loops occuring on earth. To mediate this point, we define a pipeline that leverages generative AI to seed our base 3D creatures.</p>
+            </section>
+
+            <section id="introduction" class="bg-white rounded-xl shadow-md p-6 mb-10 scroll-mt-16">
+                 <h2 class="text-2xl font-semibold mb-4 border-b pb-2">1. Introduction</h2>
+                 <div class="flex flex-wrap lg:flex-nowrap gap-6">
+                     <div class="flex-grow">
+                        <p class="mb-4">Advancements in Artificial Intelligence and foundation models enable on-demand generation of 3D topologies. These 3D models have received great attention for applications linked to engineering design, but have not yet been leveraged for the study of artificial life. The underlying prior information informing the generative design are datasets of all life on earth and these models are therefore perfectly positioned to generate "Life as it could be". This paper aims to uncover how forms generated by foundation models can be simulated and evolved to learn about general principles.</p>
+                        <p class="mb-4">Artificial Life (Alife) aims to explore through simulation "life as it could be". To uncover the mysteries of the observed open-ended evolution <a href="#ref_hughes2024openendednessessentialartificialsuperhuman">[1]</a> that took place on earth, a large body of work focuses on Euclidean spaces of dimension three as they model physical space. Foundation models armed with prior knowledge of our world are able to generate on demand 3D objects representing known and unknown lifeforms. This paper aims to explore how such these shapes can be brought to life and evolved.</p>
+                        <p class="mb-4">Multiple obstacles have prevented researchers from reproducing the evolution of natural life in simulation. Encodings and complexification, limited compute for both creature expansion but also enough generations, advanced and rich enough environments, the right evolutive pressures and serendipitous curriculum learning <a href="#ref_Vaxenburg2025">[2]</a>.</p>
+                        <p class="mb-4">Advances in artificial intelligence technologies are being leveraged to advance artificial life research in multiple facets (Search, evolution pressure etc.) <a href="#ref_kumar2024automatingsearchartificiallife">[3]</a>.</p>
+                        <p class="mb-4">This paper focuses on leveraging Mesh generators, which take in a prompt or an image and output a 3D shape, for the evolution of virtual creatures in 3D substrates. Attention in Generative CAD etc. <a href="#ref_Wong_2024">[4]</a> but less application to Alife.</p>
+                        <p class="mb-4">Desired traits of Foundation models for our application.</p>
+                        <p class="mb-4">3D worlds approximating real physics allow researchers to intuitively explore how the virtual creature encodings supports known animal-like life forms and function. Additionally, evolved solutions in simulation can be more intuitively physically embodied.</p>
+                        <p class="mb-4">Presentation of DiffAqua, and concrete experiments <a href="#ref_motionPlanner">[5]</a>, <a href="#ref_KSims">[6, 7]</a>.</p>
+                        <p class="mb-4">Prompt‑Level Genotype – Introduces natural‑language prompts as a compact, expressive, and human‑interpretable genome.</p>
+                        <p class="mb-4">Prompt-level genotypes.</p>
+                        <p class="mb-4">Freeform Evolution requires tremendous compute and real-world priors are a way to accelerate the search for functional solutions/narrow the search space <a href="#ref_li2024generatingfreeformendoskeletalrobots">[8]</a>.</p>
+                        <p class="mb-4">Traits of image generators including character consistency, Attribute Precision, cleaner voxelization boundaries, edit‑in‑place all facilitate these pipelines.</p>
+                        <p>2D→3D Bridging now possible – Demonstrates a practical, scalable route from textual ideas to physics‑ready meshes with no artist in the loop.</p>
+                     </div>
+                     <div class="w-full lg:w-1/3 flex-shrink-0">
+                         <figure>
+                            <img src="./figures/Figure1.jpg" class="rounded-lg border border-gray-200" alt="Figure 1: Phase transition energies"/>
+                            <figcaption class="mt-2 text-sm text-gray-600 text-center">
+                                <b>Figure 1:</b> ``Energies'' (inferiorities) of strings in a first-order phase transition with latent heat $\Delta\epsilon$. <i>(Note: LaTeX math $\Delta\epsilon$ may need specific rendering setup).</i>
+                            </figcaption>
+                        </figure>
+                     </div>
+                 </div>
+            </section>
+
+            <section id="creature_generation_pipeline" class="bg-white rounded-xl shadow-md p-6 mb-10 scroll-mt-16">
+                 <h2 class="text-2xl font-semibold mb-4 border-b pb-2">2. Creature Generation Pipeline</h2>
+                 <p class="mb-4">On representations. Because the mutations occur in the high-level feature space (via the generative process) rather than direct bit flips, <b>most offspring are valid</b> – a critical requirement for evolvability.</p>
+                 <p class="mb-4">Free-form text prompts as an encoding layer have the advantage of being directly <b>human interpretable</b>, <b>richly descriptive</b> and easily <b>mutable</b> <a href="#ref_guo2025evopromptconnectingllmsevolutionary">[9]</a>, <a href="#ref_Wong_2023">[10]</a>. Prompts have the ability to directly affect the shape of virtual creatures through multiple mechanisms, including global known lifeforms as targets, attribute modifiers as descriptors, etc.</p>
+                 <p class="mb-4">Modern text-to-image generation models have made great strides in 2024–2025. Key advancements include character consistency across images <a href="#ref_tewel2024trainingfreeconsistenttexttoimagegeneration">[11]</a>, fine attribute control <a href="#ref_brooks2023instructpix2pixlearningfollowimage">[12]</a>, editability, and high resolution <a href="#ref_podell2023sdxlimprovinglatentdiffusion">[13]</a>, all of which help maintain coherence and precision as evolved creatures are visualized.</p>
+                 <p class="mb-4">2025 has seen a burst of tools and models for image-to-3D reconstruction <a href="#ref_tochilkin2024triposrfast3dobject">[14]</a> and text-to-3D synthesis <a href="#ref_zhu2024hifahighfidelitytextto3dgeneration">[15]</a>. These developments enable a prompt-to-3D pipeline: a prompt produces an image (the creature’s appearance) and then AI lifts that into a 3D mesh for use in virtual worlds or physics simulations. Fast Single-Image Reconstruction: feed-forward pass under 0.5 seconds. Significantly better 3D quality from text prompts. Large focus on usable, animation-ready geometry as well as Clean and Watertight Mesh Generation.</p>
+                 <p class="mb-4">A grand challenge is to reverse-engineer function from that form. Affordance and Mobility Inference: A line of recent work in computer vision and robotics focuses on understanding the affordances of 3D objects. For example, in the context of scenes, methods now can identify articulating parts and how they move (doors that rotate, drawers that slide, etc.) <a href="#ref_53213">[16]</a>. In our example, for DiffAqua, we might want to detect and animate fish parts.</p>
+                 <p class="mb-4">Automated rigging <a href="#ref_liu2025riganythingtemplatefreeautoregressiverigging">[17]</a>, <a href="#ref_RigNet">[18]</a>.</p>
+                 <p class="mb-4">Translating this to evolved creatures: if we generate a creature mesh, we could apply similar techniques to predict joint locations (e.g. identify limb segments and likely hinge points at knees or shoulders). The model might recognize “this looks like a leg that could bend here” or “these wings probably flap along this edge.” Such an automatic rigging or motion inference is still in early stages, but the components are emerging. At a simpler level, just classifying the creature’s morphology (does it have legs? wings? wheels?) can inform what type of movement to attempt. This is analogous to how a human seeing a fantastical creature might guess “it seems to have fins, so maybe it swims.” By leveraging large datasets of 3D objects with known functions (e.g. Shape2Motion dataset for articulated objects), one can train models to extend those predictions to new, AI-generated forms.</p>
+                 <p class="mb-4">Evolving Controllers for AI-Generated Bodies: physics-augmented diffusion model <a href="#ref_wang2023diffusebot">[19]</a>, <a href="#ref_li2025dsoaligning3dgenerators">[20]</a>, <a href="#ref_guo2024physicallycompatible3dobject">[21]</a>.</p>
+                 <p class="mb-4">Simulation-Based Fitness. In April 2025, a joint team from Google DeepMind and HHMI Janelia unveiled the first whole‑body physics simulation of the fruit fly Drosophila melanogaster—an anatomically detailed virtual insect that can both walk and fly realistically.</p>
+                 <p>The remainder of this paper is organized as follows: Section 2 reviews related work in generative AI for 3D content creation, evolutionary computation with generative models, and physics-based simulation for functional design. Section 3 details the proposed methodology, including the prompt-level genotype, the genotype-to-phenotype pipeline, and the evolutionary framework. Section 4 describes the experimental setup using the DiffAqua environment and presents the results. Section 5 discusses the findings, strengths, limitations, and broader implications of the approach. Finally, Section 6 concludes the paper and outlines future research directions.</p>
+            </section>
+
+             <section id="pipeline" class="bg-white rounded-xl shadow-md p-6 mb-10 scroll-mt-16">
+                 <h2 class="text-2xl font-semibold mb-4 border-b pb-2">3. Pipeline Details</h2>
+                 <h3 class="text-xl font-medium mt-6 mb-3">2.1 Related Work</h3>
+                 <h4 class="text-lg font-medium mt-4 mb-2">2.1.1. Advances in Text-to-Image Synthesis</h4>
+                 <p class="mb-4">Text-to-image (T2I) synthesis has seen remarkable progress, largely driven by diffusion models such as Stable Diffusion <a href="#ref_rombach2022highresolutionimagesynthesislatent">[22]</a>, DALL-E <a href="#ref_ramesh2021zeroshottexttoimagegeneration">[23]</a>, and Imagen <a href="#ref_saharia2022photorealistictexttoimagediffusionmodels">[24]</a>. These models can generate high-quality, diverse images from textual prompts. A key area of development is Visual Concept Mining (VCM) <a href="#ref_li2025comprehensivesurveyvisualconcept">[25]</a>, which aims to enhance the controllability of T2I models by allowing them to learn specific visual concepts (e.g., artistic styles, object features) from reference images, complementing textual inputs. This improved controllability is crucial for generating specific and consistent visual features for virtual creatures.</p>
+                 <h4 class="text-lg font-medium mt-4 mb-2">2.1.2. From 2D Images to 3D Models</h4>
+                 <p class="mb-4">Bridging the gap from 2D images to 3D models is a critical step. Current research in diffusion models for 3D generation can be broadly classified into three categories: 2D space diffusion leveraging pretrained 2D models, 2D space diffusion without pretrained models, and diffusion processes operating directly in 3D space <a href="#ref_placeholder1">[P1]</a>.</p>
+                 <p>Techniques like DreamFusion <a href="#ref_placeholder1">[P1]</a> and Score Jacobian Chaining <a href="#ref_placeholder1">[P1]</a> utilize pretrained 2D diffusion models to optimize 3D representations (often Neural Radiance Fields, NeRFs) by scoring rendered 2D views. Image-to-3D mesh generation tools like Trellis <a href="#ref_placeholder2">[P2]</a>, employed in this work, aim to produce explicit mesh representations directly. Trellis and similar models <a href="#ref_placeholder1">[P1]</a> represent a scalable route to 3D assets, though challenges such as the "Janus problem" (multi-view inconsistency) persist and are active areas of research <a href="#ref_placeholder1">[P1]</a>. Efficient alternatives like DreamGaussian also contribute to this rapidly evolving field <a href="#ref_placeholder1">[P1]</a>, <a href="#ref_hsinying2025consistentsubjectgenerationcontrastive">[26]</a>.</p>
+                 <aside class="mt-4 p-3 bg-gray-50 rounded-lg border text-sm text-gray-600">
+                     Note [P1], [P2]: Placeholder citations used where the original LaTeX source had numbers (e.g., 1, 2) without corresponding cite keys. These should be replaced with proper references by linking to the correct ID below.
+                 </aside>
+            </section>
+
+            <section id="computational_design" class="bg-white rounded-xl shadow-md p-6 mb-10 scroll-mt-16">
+                 <h2 class="text-2xl font-semibold mb-4 border-b pb-2">4. Computational Design and Simulation Environments in ALife</h2>
+                 <p class="mb-4">Specialized simulation environments are crucial for ALife research involving embodied agents:</p>
+                 <p class="mb-4">DiffAqua <a href="#ref_Ma_2021">[27]</a>, the chosen platform for this work, provides a differentiable pipeline for the co-design of soft underwater swimmer geometry (using Wasserstein barycenters for shape interpolation) and their controllers. Its differentiability allows for efficient gradient-based optimization <a href="#ref_DiffTaichi">[28]</a>.</p>
+
+                 <h3 class="text-xl font-medium mt-6 mb-3">3.2 Proposed Methodology (Example Subsection)</h3>
+                 <h4 class="text-lg font-medium mt-4 mb-2">3.2.3. Step 3: Mesh Adaptation for Simulation (DiffAqua)</h4>
+                 <p class="mb-4">This step is critical for translating the raw 3D mesh into a format suitable for the DiffAqua soft body physics simulator. This involves voxelization and the definition of actuation (muscles).</p>
+                 <p class="mb-2"><b>Voxelization:</b> The mesh generated by Trellis is converted into a voxel-based representation. Method: A uniform grid voxelization approach is typically employed, though adaptive methods could be explored. Standard libraries or custom scripts can perform this conversion. The resolution of the voxel grid is a key parameter, balancing simulation fidelity against computational cost. General literature on voxelization from images provides context for this process.</p>
+                 <p class="mb-2"><b>Muscle Placement / Actuator Definition:</b> Defining how the creature is actuated is crucial for assessing its function. Automation Challenge: The automation and intelligence of this "muscle placement" step are of paramount importance for a truly AI-driven design pipeline. If this requires significant manual intervention, it becomes a bottleneck. Current Approach (Hypothesized based on user input): An automated or heuristic-based method is used to place actuators on the voxelized creature. This could involve:</p>
+                 <ul class="list-disc list-inside mb-3 ml-4 space-y-1">
+                     <li>Identifying prominent appendages or regions of the body from the geometry.</li>
+                     <li>Using simple rules (e.g., placing actuators along the main axis for undulation, or within limb-like structures).</li>
+                     <li>Potentially deriving cues from the initial prompt (e.g., "powerful flippers" might suggest actuator placement in flipper-like regions).</li>
+                 </ul>
+                 <p class="mb-4">Context from Simulators: DiffAqua itself is designed for co-designing geometry and controllers. SoftZoo provides interfaces for specifying muscle placement. DiffuseBot also parameterizes actuator placement for its soft robots.</p>
+                 <p class="mb-4">Novelty Potential: A sophisticated method for automated muscle placement, perhaps using geometric deep learning on the mesh or further LLM-based interpretation of the prompt to infer functional regions, could be a significant research contribution in its own right. This directly addresses the challenge of deriving function from AI-generated form.</p>
+                 <p><b>Material Properties:</b> Material properties for the soft body simulation in DiffAqua (e.g., Young's modulus, density) are assigned. Initially, these might be uniform across the creature's body. More advanced implementations could allow for heterogeneous material properties, potentially also guided by the prompt or evolved. SoftZoo, for example, allows for specifying body stiffness.</p>
+            </section>
+
+            <section id="evolvability" class="bg-white rounded-xl shadow-md p-6 mb-10 scroll-mt-16">
+                 <h2 class="text-2xl font-semibold mb-4 border-b pb-2">5. Evolvability</h2>
+                 <p class="mb-4">Mitigate diversity collapse by evolving in different representations.</p>
+
+                 <h3 class="text-xl font-medium mt-6 mb-3">2.2 Related Work (Continued)</h3>
+                 <h4 class="text-lg font-medium mt-4 mb-2">2.2.1. Prompts and LLMs as Genotypes & Evolutionary Operators</h4>
+                 <p class="mb-4"><a href="#ref_hemberg2024evolvingcodelargelanguage">[29]</a>, <a href="#ref_nisioti2024textlifereciprocalrelationship">[30]</a>, <a href="#ref_cai2024exploringimprovementevolutionarycomputation">[31]</a>, <a href="#ref_fernando2023promptbreederselfreferentialselfimprovementprompt">[32]</a>, <a href="#ref_bradley2023qualitydiversityaifeedback">[33]</a>, <a href="#ref_lehman2022evolutionlargemodels">[34]</a>.</p>
+                 <p class="mb-4">The idea of using LLMs to guide or perform evolutionary operations is gaining traction. LLM GP formalizes an LLM-based evolutionary algorithm for evolving code, where the LLM handles initialization, mutation, and crossover by processing and generating prompts that represent programs <a href="#ref_placeholder1">[P1]</a>. Several systems showcase this paradigm: Evolution through Large Models (ELM) uses LLMs as intelligent mutation operators for robotic morphologies; EvoPrompting and PromptBreeder evolve the prompts themselves for in-context learning; EvoLLM treats the LLM as an end-to-end evolutionary algorithm; and Quality-Diversity through AI Feedback (QDAIF) uses LLMs to vary and evaluate texts and code for diversity and quality <a href="#ref_placeholder2">[P2]</a>. LLMs are also being explored for broader improvements to EC, such as assisting in evolutionary strategy selection, optimizing population design, and enhancing operator design.</p>
+                 <aside class="mt-4 p-3 bg-gray-50 rounded-lg border text-sm text-gray-600">
+                     Note [P1], [P2]: Placeholder citations used where the original LaTeX source had numbers (e.g., 1, 2) without corresponding cite keys. These should be replaced with proper references by linking to the correct ID below.
+                 </aside>
+            </section>
+
+             <section id="evolutionary_loop" class="bg-white rounded-xl shadow-md p-6 mb-10 scroll-mt-16">
+                 <h2 class="text-2xl font-semibold mb-4 border-b pb-2">6. Evolutionary Loop and Termination Criteria</h2>
+                 <p>(Content for this section was missing in the provided LaTeX source)</p>
+            </section>
+
+            <section id="results" class="bg-white rounded-xl shadow-md p-6 mb-10 scroll-mt-16">
+                 <h2 class="text-2xl font-semibold mb-4 border-b pb-2">7. Results</h2>
+                 <p class="mb-4">Open-endedness and creativity <a href="#ref_hughes2024openendednessessentialartificialsuperhuman">[1]</a>, <a href="#ref_kamb2024analytictheorycreativityconvolutional">[35]</a>.</p>
+                 <p>(Detailed results content to be added)</p>
+            </section>
+
+            <section id="discussion" class="bg-white rounded-xl shadow-md p-6 mb-10 scroll-mt-16">
+                 <h2 class="text-2xl font-semibold mb-4 border-b pb-2">8. Discussion</h2>
+                 <p class="mb-4">In this particular system avalanche size can be approximated by the size $s$ of the genotype that gave rise to it, see <a href="#introduction">Figure 1</a>. We shall measure the distribution of these sizes $P(s)$ in the Artificial Life system Avida, which implements a population of self-replicating computer programs written in a simple machine language-like instruction set of $\mathcal{D}=24$ instructions, with programs of varying sequence length. In the course of self-replication, these programs produce mutant off-spring because the `copy` instruction they use is flawed at a rate $R$ errors per instruction copied, and adapt to an environment in which the performance of <i>logical</i> computations on externally provided numbers is akin to the catalysis of chemical reactions <a href="#ref_OBA">[36]</a>. In this <i>artificial chemistry</i> therefore, successful computations accelerate the metabolism (i.e., the CPU) of those strings that carry the <i>gene</i> (code) necessary to perform the trick, and any program discovering a new trick is the seed of another avalanche.</p>
+                 <aside class="mt-4 p-3 bg-gray-50 rounded-lg border text-sm text-gray-600">
+                    <i>Note: LaTeX math $s$, $P(s)$, $\mathcal{D}=24$, $R$ might not render correctly without MathJax/MathML setup. Consider replacing with plain text or images if needed. The reference \Cref{size} was interpreted as a link to Figure 1 based on context. The reference \citep{OBA} was mapped to the OBA entry in the bibliography.</i>
+                 </aside>
+            </section>
+
+             <section id="acknowledgements" class="bg-white rounded-xl shadow-md p-6 mb-10 scroll-mt-16">
+                 <h2 class="text-2xl font-semibold mb-4 border-b pb-2">Acknowledgements</h2>
+                 <p>This work was supported by NSF grant No. 123456.</p>
+            </section>
+
+            <section id="references" class="bg-white rounded-xl shadow-md p-6 mb-10 scroll-mt-16">
+                 <h2 class="text-2xl font-semibold mb-4 border-b pb-2">References</h2>
+                 <div class='citation text-sm'>
+                    <div class="reference-item"><a href="#ref_hughes2024openendednessessentialartificialsuperhuman" id="ref_hughes2024openendednessessentialartificialsuperhuman">[1]</a> Hughes, E., Dennis, M., Parker-Holder, J., Behbahani, F., Mavalankar, A., Shi, Y., Schaul, T., & Rocktaschel, T. (2024). Open-Endedness is Essential for Artificial Superhuman Intelligence. arXiv preprint arXiv:2406.04268. <a href="https://arxiv.org/abs/2406.04268" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_Vaxenburg2025" id="ref_Vaxenburg2025">[2]</a> Vaxenburg, R., Siwanowicz, I., Merel, J., Robie, A. A., Morrow, C., Novati, G., Stefanidi, Z., Both, G.-J., Card, G. M., Reiser, M. B., Botvinick, M. M., Branson, K. M., Tassa, Y., & Turaga, S. C. (2025). Whole-body physics simulation of fruit fly locomotion. <i>Nature</i>. <a href="http://dx.doi.org/10.1038/s41586-025-09029-4" target="_blank" rel="noopener noreferrer">[DOI]</a></div>
+                    <div class="reference-item"><a href="#ref_kumar2024automatingsearchartificiallife" id="ref_kumar2024automatingsearchartificiallife">[3]</a> Kumar, A., Lu, C., Kirsch, L., Tang, Y., Stanley, K. O., Isola, P., & Ha, D. (2024). Automating the Search for Artificial Life with Foundation Models. arXiv preprint arXiv:2412.17799. <a href="https://arxiv.org/abs/2412.17799" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_Wong_2024" id="ref_Wong_2024">[4]</a> Wong, M., Rios, T., Menzel, S., & Ong, Y. S. (2024, June). Prompt Evolutionary Design Optimization with Generative Shape and Vision-Language models. In <i>2024 IEEE Congress on Evolutionary Computation (CEC)</i> (pp. 1–8). IEEE. <a href="http://dx.doi.org/10.1109/CEC60901.2024.10611898" target="_blank" rel="noopener noreferrer">[DOI]</a></div>
+                    <div class="reference-item"><a href="#ref_motionPlanner" id="ref_motionPlanner">[5]</a> Satoi, D., Hagiwara, M., Uemoto, A., Nakadai, H., & Hoshino, J. (2016). Unified motion planner for fishes with various swimming styles. <i>ACM Transactions on Graphics (TOG)</i>, 35(4), 1-15. <a href="https://doi.org/10.1145/2897824.2925977" target="_blank" rel="noopener noreferrer">[DOI]</a></div>
+                    <div class="reference-item"><a href="#ref_10.1145/192161.192167" id="ref_10.1145/192161.192167">[6]</a> Sims, K. (1994). Evolving virtual creatures. In <i>Proceedings of the 21st annual conference on Computer graphics and interactive techniques</i> (pp. 15-22). <a href="https://doi.org/10.1145/192161.192167" target="_blank" rel="noopener noreferrer">[DOI]</a></div>
+                    <div class="reference-item"><a href="#ref_KSims" id="ref_KSims">[7]</a> Sims, K. (2023). Evolving Virtual Creatures. In <i>Seminal Graphics Papers: Pushing the Boundaries, Volume 2</i> (Art. 73). ACM. <a href="https://doi.org/10.1145/3596711.3596785" target="_blank" rel="noopener noreferrer">[DOI]</a></div>
+                    <div class="reference-item"><a href="#ref_li2024generatingfreeformendoskeletalrobots" id="ref_li2024generatingfreeformendoskeletalrobots">[8]</a> Li, M., Kong, L., & Kriegman, S. (2024). Generating Freeform Endoskeletal Robots. arXiv preprint arXiv:2412.01036. <a href="https://arxiv.org/abs/2412.01036" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_guo2025evopromptconnectingllmsevolutionary" id="ref_guo2025evopromptconnectingllmsevolutionary">[9]</a> Guo, Q., Wang, R., Guo, J., Li, B., Song, K., Tan, X., Liu, G., Bian, J., & Yang, Y. (2025). EvoPrompt: Connecting LLMs with Evolutionary Algorithms Yields Powerful Prompt Optimizers. arXiv preprint arXiv:2309.08532. <a href="https://arxiv.org/abs/2309.08532" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_Wong_2023" id="ref_Wong_2023">[10]</a> Wong, M., Ong, Y.-S., Gupta, A., Bali, K. K., & Chen, C. (2023, June). Prompt Evolution for Generative AI: A Classifier-Guided Approach. In <i>2023 IEEE Conference on Artificial Intelligence (CAI)</i> (pp. 226–229). IEEE. <a href="http://dx.doi.org/10.1109/cai54212.2023.00105" target="_blank" rel="noopener noreferrer">[DOI]</a></div>
+                    <div class="reference-item"><a href="#ref_tewel2024trainingfreeconsistenttexttoimagegeneration" id="ref_tewel2024trainingfreeconsistenttexttoimagegeneration">[11]</a> Tewel, Y., Kaduri, O., Gal, R., Kasten, Y., Wolf, L., Chechik, G., & Atzmon, Y. (2024). Training-Free Consistent Text-to-Image Generation. arXiv preprint arXiv:2402.03286. <a href="https://arxiv.org/abs/2402.03286" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_brooks2023instructpix2pixlearningfollowimage" id="ref_brooks2023instructpix2pixlearningfollowimage">[12]</a> Brooks, T., Holynski, A., & Efros, A. A. (2023). InstructPix2Pix: Learning to Follow Image Editing Instructions. arXiv preprint arXiv:2211.09800. <a href="https://arxiv.org/abs/2211.09800" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_podell2023sdxlimprovinglatentdiffusion" id="ref_podell2023sdxlimprovinglatentdiffusion">[13]</a> Podell, D., English, Z., Lacey, K., Blattmann, A., Dockhorn, T., Müller, J., Penna, J., & Rombach, R. (2023). SDXL: Improving Latent Diffusion Models for High-Resolution Image Synthesis. arXiv preprint arXiv:2307.01952. <a href="https://arxiv.org/abs/2307.01952" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_tochilkin2024triposrfast3dobject" id="ref_tochilkin2024triposrfast3dobject">[14]</a> Tochilkin, D., Pankratz, D., Liu, Z., Huang, Z., Letts, A., Li, Y., Liang, D., Laforte, C., Jampani, V., & Cao, Y.-P. (2024). TripoSR: Fast 3D Object Reconstruction from a Single Image. arXiv preprint arXiv:2403.02151. <a href="https://arxiv.org/abs/2403.02151" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_zhu2024hifahighfidelitytextto3dgeneration" id="ref_zhu2024hifahighfidelitytextto3dgeneration">[15]</a> Zhu, J., Zhuang, P., & Koyejo, S. (2024). HiFA: High-fidelity Text-to-3D Generation with Advanced Diffusion Guidance. arXiv preprint arXiv:2305.18766. <a href="https://arxiv.org/abs/2305.18766" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_53213" id="ref_53213">[16]</a> Delitzas, A., Takmaz, A., Tombari, F., Pollefeys, M., & Engelmann, F. (2024). SceneFun3D: Fine-Grained Functionality and Affordance Understanding in 3D Scenes. In <i>CVPR</i>. <a href="https://alexdelitzas.github.io/assets/pdf/SceneFun3D.pdf" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_liu2025riganythingtemplatefreeautoregressiverigging" id="ref_liu2025riganythingtemplatefreeautoregressiverigging">[17]</a> Liu, I., Xu, Z., Yifan, W., Tan, H., Xu, Z., Wang, X., Su, H., & Shi, Z. (2025). RigAnything: Template-Free Autoregressive Rigging for Diverse 3D Assets. arXiv preprint arXiv:2502.09615. <a href="https://arxiv.org/abs/2502.09615" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_RigNet" id="ref_RigNet">[18]</a> Xu, Z., Zhou, Y., Kalogerakis, E., Landreth, C., & Singh, K. (2020). RigNet: Neural Rigging for Articulated Characters. <i>ACM Transactions on Graphics (TOG)</i>, 39.</div>
+                    <div class="reference-item"><a href="#ref_wang2023diffusebot" id="ref_wang2023diffusebot">[19]</a> Wang, T.-H., Zheng, J., Ma, P., Du, Y., Kim, B., Spielberg, A. E., Tenenbaum, J. B., Gan, C., & Rus, D. (2023). DiffuseBot: Breeding Soft Robots With Physics-Augmented Generative Diffusion Models. In <i>Thirty-seventh Conference on Neural Information Processing Systems</i>. <a href="https://openreview.net/forum?id=1zo4iioUEs" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_li2025dsoaligning3dgenerators" id="ref_li2025dsoaligning3dgenerators">[20]</a> Li, R., Zheng, C., Rupprecht, C., & Vedaldi, A. (2025). DSO: Aligning 3D Generators with Simulation Feedback for Physical Soundness. arXiv preprint arXiv:2503.22677. <a href="https://arxiv.org/abs/2503.22677" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_guo2024physicallycompatible3dobject" id="ref_guo2024physicallycompatible3dobject">[21]</a> Guo, M., Wang, B., Ma, P., Zhang, T., Owens, C. E., Gan, C., Tenenbaum, J. B., He, K., & Matusik, W. (2024). Physically Compatible 3D Object Modeling from a Single Image. arXiv preprint arXiv:2405.20510. <a href="https://arxiv.org/abs/2405.20510" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_rombach2022highresolutionimagesynthesislatent" id="ref_rombach2022highresolutionimagesynthesislatent">[22]</a> Rombach, R., Blattmann, A., Lorenz, D., Esser, P., & Ommer, B. (2022). High-Resolution Image Synthesis with Latent Diffusion Models. arXiv preprint arXiv:2112.10752. <a href="https://arxiv.org/abs/2112.10752" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_ramesh2021zeroshottexttoimagegeneration" id="ref_ramesh2021zeroshottexttoimagegeneration">[23]</a> Ramesh, A., Pavlov, M., Goh, G., Gray, S., Voss, C., Radford, A., Chen, M., & Sutskever, I. (2021). Zero-Shot Text-to-Image Generation. arXiv preprint arXiv:2102.12092. <a href="https://arxiv.org/abs/2102.12092" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_saharia2022photorealistictexttoimagediffusionmodels" id="ref_saharia2022photorealistictexttoimagediffusionmodels">[24]</a> Saharia, C., Chan, W., Saxena, S., Li, L., Whang, J., Denton, E., Ghasemipour, S. K. S., Ayan, B. K., Mahdavi, S. S., Lopes, R. G., Salimans, T., Ho, J., Fleet, D. J., & Norouzi, M. (2022). Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding. arXiv preprint arXiv:2205.11487. <a href="https://arxiv.org/abs/2205.11487" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_li2025comprehensivesurveyvisualconcept" id="ref_li2025comprehensivesurveyvisualconcept">[25]</a> Li, Z., Li, J., Xiong, L., Fu, Z., & Li, Z. (2025). A Comprehensive Survey on Visual Concept Mining in Text-to-image Diffusion Models. arXiv preprint arXiv:2503.13576. <a href="https://arxiv.org/abs/2503.13576" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_hsinying2025consistentsubjectgenerationcontrastive" id="ref_hsinying2025consistentsubjectgenerationcontrastive">[26]</a> Lee, H.-Y., Chan, K. C. K., & Yang, M.-H. (2025). Consistent Subject Generation via Contrastive Instantiated Concepts. arXiv preprint arXiv:2503.24387. <a href="https://arxiv.org/abs/2503.24387" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_Ma_2021" id="ref_Ma_2021">[27]</a> Ma, P., Du, T., Zhang, J. Z., Wu, K., Spielberg, A., Katzschmann, R. K., & Matusik, W. (2021). DiffAqua: a differentiable computational design pipeline for soft underwater swimmers with shape interpolation. <i>ACM Transactions on Graphics (TOG)</i>, 40(4), 1-14. <a href="http://dx.doi.org/10.1145/3450626.3459832" target="_blank" rel="noopener noreferrer">[DOI]</a></div>
+                    <div class="reference-item"><a href="#ref_DiffTaichi" id="ref_DiffTaichi">[28]</a> Hu, Y., Anderson, L., Li, T.-M., Sun, Q., Carr, N., Ragan-Kelley, J., & Durand, F. (2019). DiffTaichi: Differentiable Programming for Physical Simulation. arXiv preprint arXiv:1910.00935. <a href="http://arxiv.org/abs/1910.00935" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_hemberg2024evolvingcodelargelanguage" id="ref_hemberg2024evolvingcodelargelanguage">[29]</a> Hemberg, E., Moskal, S., & O'Reilly, U.-M. (2024). Evolving Code with A Large Language Model. arXiv preprint arXiv:2401.07102. <a href="https://arxiv.org/abs/2401.07102" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_nisioti2024textlifereciprocalrelationship" id="ref_nisioti2024textlifereciprocalrelationship">[30]</a> Nisioti, E., Glanois, C., Najarro, E., Dai, A., Meyerson, E., Pedersen, J. W., Teodorescu, L., Hayes, C. F., Sudhakaran, S., & Risi, S. (2024). From Text to Life: On the Reciprocal Relationship between Artificial Life and Large Language Models. arXiv preprint arXiv:2407.09502. <a href="https://arxiv.org/abs/2407.09502" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_cai2024exploringimprovementevolutionarycomputation" id="ref_cai2024exploringimprovementevolutionarycomputation">[31]</a> Cai, J., Xu, J., Li, J., Ymauchi, T., Iba, H., & Tei, K. (2024). Exploring the Improvement of Evolutionary Computation via Large Language Models. arXiv preprint arXiv:2405.02876. <a href="https://arxiv.org/abs/2405.02876" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_fernando2023promptbreederselfreferentialselfimprovementprompt" id="ref_fernando2023promptbreederselfreferentialselfimprovementprompt">[32]</a> Fernando, C., Banarse, D., Michalewski, H., Osindero, S., & Rocktäschel, T. (2023). Promptbreeder: Self-Referential Self-Improvement Via Prompt Evolution. arXiv preprint arXiv:2309.16797. <a href="https://arxiv.org/abs/2309.16797" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_bradley2023qualitydiversityaifeedback" id="ref_bradley2023qualitydiversityaifeedback">[33]</a> Bradley, H., Dai, A., Teufel, H., Zhang, J., Oostermeijer, K., Bellagente, M., Clune, J., Stanley, K., Schott, G., & Lehman, J. (2023). Quality-Diversity through AI Feedback. arXiv preprint arXiv:2310.13032. <a href="https://arxiv.org/abs/2310.13032" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_lehman2022evolutionlargemodels" id="ref_lehman2022evolutionlargemodels">[34]</a> Lehman, J., Gordon, J., Jain, S., Ndousse, K., Yeh, C., & Stanley, K. O. (2022). Evolution through Large Models. arXiv preprint arXiv:2206.08896. <a href="https://arxiv.org/abs/2206.08896" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_kamb2024analytictheorycreativityconvolutional" id="ref_kamb2024analytictheorycreativityconvolutional">[35]</a> Kamb, M., & Ganguli, S. (2024). An analytic theory of creativity in convolutional diffusion models. arXiv preprint arXiv:2412.20292. <a href="https://arxiv.org/abs/2412.20292" target="_blank" rel="noopener noreferrer">[Link]</a></div>
+                    <div class="reference-item"><a href="#ref_OBA" id="ref_OBA">[36]</a> Ofria, C. and Brown, C.T. (1998). The Avida User's Manual. In Adami (1998). The Avida software is publicly available at ftp.krl.caltech.edu/pub/avida.</div>
+                 </div>
+                 <aside class="mt-4 p-3 bg-gray-50 rounded-lg border text-sm text-gray-600">
+                     <i>Note: References populated from the provided BibTeX data and numbered according to first appearance in the text. Placeholder citations [P1], [P2] still need manual resolution if they refer to specific entries.</i>
+                 </aside>
+            </section>
         </div>
-        <div class="margin-right-block">
-            <i>Note: References populated from the provided BibTeX data and numbered according to first appearance in the text. Placeholder citations [P1], [P2] still need manual resolution if they refer to specific entries.</i>
-        </div>
+
+        <div class="hidden lg:block lg:w-1/6 flex-shrink-0 order-3 lg:pl-4">
+            </div>
+
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select all section elements that have an ID
+            const sections = document.querySelectorAll('section[id]');
+            // Select all links within the table of contents navigation
+            const navLinks = document.querySelectorAll('#toc-nav a.toc-link');
+
+            // Function to update the active link based on scroll position
+            const updateActiveLink = () => {
+                let currentSectionId = '';
+                // Iterate over sections to find the one currently in view
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    // Check if the section's top edge is within a certain range from the top of the viewport
+                    // Adjust the offset (150px here) as needed for better activation timing
+                    if (window.scrollY >= sectionTop - 150) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                // Update the active class on navigation links
+                navLinks.forEach(link => {
+                    link.classList.remove('active'); // Remove active class from all links
+                    // Add active class to the link corresponding to the current section
+                    if (link.getAttribute('href') === `#${currentSectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            };
+
+            // Add scroll event listener to the window
+            window.addEventListener('scroll', updateActiveLink);
+
+            // Initial call to set the active link on page load
+            updateActiveLink();
+        });
+    </script>
 
 </body>
 </html>
