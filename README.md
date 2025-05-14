@@ -19,5 +19,3 @@ The `fish_viewers` folder, containing the necessary HTML files for the interacti
 Once downloaded (it might be a ZIP file, so extract it first if needed), you should have a folder named `fish_viewers`.
 
 * Place this entire `fish_viewers` folder directly into the **root** of your "blog template folder" (the main directory of this specific project/blog).
-
-The expected project structure should look something like this:
